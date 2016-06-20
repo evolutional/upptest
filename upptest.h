@@ -1,6 +1,6 @@
 #pragma once
 /*
-utest - The micro unit test framework for C99
+utest - The micro unit test framework for C++11
 
 Author - Oli Wilkinson (https://github.com/evolutional/upptest)
 
