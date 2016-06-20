@@ -82,7 +82,7 @@ An example which filters tests in a specific category:
 
 All tests are registered with a global `utest::registry`.  You can retrieve these tests by accessing:
 
-	`const auto& tests = utest::registry::get()->tests();`
+	const auto& tests = utest::registry::get()->tests();
 
 You can use this to fill your own stl containers and then execute them with `utest::runner::run()`. The run function has various overrides that accepts collections, begin/end range iterators and filter predicates, allowing you to easily create your own filtering and execution process.
 
