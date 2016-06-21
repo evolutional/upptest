@@ -111,7 +111,7 @@ namespace utest
 			, status(status::not_run)
 			, duration()
 			, err_message()
-			, err_file(nullptr)
+			, err_file()
 			, err_line(0)
 		{}
 
@@ -119,9 +119,14 @@ namespace utest
 		{
 			status = status::fail;
 			err_message = "unhandled exception";
+			if (ex.what())
+			{
+				err_message.append(": ");
+				err_message.append(ex.what());
+			}
 		}
 
-		void fail(const std::string& msg, const char* file_name, const int line_num)
+		void fail(const std::string& msg, const std::string& file_name, const int line_num)
 		{
 			status = status::fail;
 			err_message = msg;
@@ -133,7 +138,7 @@ namespace utest
 		status status;
 		std::chrono::milliseconds duration;
 		std::string err_message;
-		const char* err_file;
+		std::string err_file;
 		int err_line;
 	};
 
@@ -191,7 +196,7 @@ namespace utest
 				return;
 			}
 			std::ostringstream err;
-			err << "Expected [" << expected << "] saw [" << actual << "]";
+			err << "Expected not [" << expected << "] saw [" << actual << "]";
 			fail(err.str(), file_name, line_num);
 		}
 
@@ -220,7 +225,7 @@ namespace utest
 			{
 				return;
 			}
-			fail("Expected nullptr", file_name, line_num);
+			fail("Expected [nullptr]", file_name, line_num);
 		}
 
 		template<typename T>
@@ -230,7 +235,7 @@ namespace utest
 			{
 				return;
 			}
-			fail("Expected non-nullptr", file_name, line_num);
+			fail("Expected not [nullptr]", file_name, line_num);
 		}
 
 		static void fail(const std::string& message, const char* file_name = "", const int line_num = 0)
@@ -311,7 +316,7 @@ namespace utest
 	{
 	public:
 
-		static status run(const info const* ti, result& out_res)
+		static status run(const info* const ti, result& out_res)
 		{
 			auto tst = ti->f();
 			out_res.info = ti;
@@ -332,7 +337,7 @@ namespace utest
 			size_t pass(0), test_count(0);
 			for (auto itr = itr_begin; itr != itr_end; ++itr)
 			{
-				const auto const* ti = *itr;
+				const auto* const ti = *itr;
 				if (filter(ti))
 				{
 					result res;

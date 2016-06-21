@@ -10,7 +10,7 @@
 		#define UTEST_CPP_IMPLEMENTATION
 		#include "upptest.h"
 
-There are no external dependencies required, there are no special build processes or requirements.
+There are no external dependencies required. The main build requirement is to have C++ exception handling enabled.
 
 # Usage #
 
@@ -35,16 +35,29 @@ Example:
 
 	utest::assert::eq(50, 50);
 
-The basic functions are:
+The basic assert functions are:
 
-	assert::eq
-	assert::neq
-	assert::is_true
-	assert::is_false
-	assert::is_null
-	assert::is_not_null
-	assert::fail
+function | required operator on type T
+--- | --- 
+`assert::eq` | `T == T`
+`assert::neq` | `T != T`
+`assert::is_true` | `if (T)`
+`assert::is_false` | `if (!T)`
+`assert::is_null` | `T == nullptr`
+`assert::is_not_null` | `T != nullptr`
+`assert::fail` | N/A
  
+If you are wishing to use `assert::eq` or `assert:neq`, you must currently provide the following operator to emit a friendly
+assert message.
+
+	inline std::ostream& operator << (std::ostream& os, const MyType& v)
+	{
+		// stream your type to 'os' here
+		// eg: os << static_cast<std::underlying_type<MyType>::type>(v);
+		return os;
+	}
+
+
 ## Executing Tests ##
 
 Executing the tests can be performed in several ways. The simplest is to run all tests that are registered:
@@ -70,7 +83,7 @@ An example that runs all test and prints the results to `std::cout` is:
 
 ### Filtering ###
 
-Tests can be executed with a filter predicate which will be passed a `const utest::info const*` for evaluation. 
+Tests can be executed with a filter predicate which will be passed a `const utest::info* const` for evaluation. 
 
 An example which filters tests in a specific category:
 
