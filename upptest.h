@@ -75,6 +75,15 @@ namespace utest
 
 #define TEST(name, category)	TEST_F(name, utest::test, category)
 
+#define UASSERT(e)	::utest::assert::expr(e, __FILE__ ,__LINE__)
+#define UASSERT_EQ(expected, actual)	::utest::assert::eq(expected, actual, __FILE__ ,__LINE__)
+#define UASSERT_NEQ(not_expected, actual)	::utest::assert::neq(not_expected, actual, __FILE__ ,__LINE__)
+#define UASSERT_TRUE(v)	::utest::assert::is_true(v, __FILE__ ,__LINE__)
+#define UASSERT_FALSE(v)	::utest::assert::is_false(v, __FILE__ ,__LINE__)
+#define UASSERT_NULL(ptr)	::utest::assert::is_null(ptr, __FILE__ ,__LINE__)
+#define UASSERT_NOT_NULL(ptr)	::utest::assert::is_not_null(ptr, __FILE__ ,__LINE__)
+#define UASSERT_FAIL(msg)	::utest::assert::fail(msg, __FILE__ ,__LINE__)
+
 	class assert_fail_exception
 		: public std::exception
 	{
@@ -200,6 +209,15 @@ namespace utest
 			fail(err.str(), file_name, line_num);
 		}
 
+		static void expr(const bool ex, const char* file_name = "", const int line_num = 0)
+		{
+			if (ex)
+			{
+				return;
+			}
+			fail("Assert expression failed", file_name, line_num);
+		}
+
 		static void is_true(const bool condition, const char* file_name = "", const int line_num = 0)
 		{
 			if (condition)
@@ -294,11 +312,10 @@ namespace utest
 			_tests.push_back(test);
 		}
 		container_type& tests() { return _tests; }
+	protected:
+		registry();		
 	private:
-		registry();
 		container_type _tests;
-
-	private:
 		static std::unique_ptr<registry> _instance;
 	};
 
@@ -382,11 +399,16 @@ namespace utest
 
 	std::unique_ptr<registry> registry::_instance;
 
+	namespace detail
+	{
+		class _concrete_registry : public registry {};
+	}
+
 	registry& registry::get()
 	{
 		if(!_instance)
 		{
-			_instance = std::unique_ptr<registry>(new registry());
+			_instance = std::make_unique<detail::_concrete_registry>();
 		}
 		return *_instance;
 	}

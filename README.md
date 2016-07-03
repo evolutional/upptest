@@ -35,17 +35,20 @@ Example:
 
 	utest::assert::eq(50, 50);
 
-The basic assert functions are:
+In order to provide information about the file and line the assertion failed, several convenience macros have been provided. These have the name UASSERT_*.
 
-function | required operator on type T
+The basic assert actions are are:
+
+function | macro | required operator on type T
 --- | --- 
-`assert::eq` | `T == T`
-`assert::neq` | `T != T`
-`assert::is_true` | `if (T)`
-`assert::is_false` | `if (!T)`
-`assert::is_null` | `T == nullptr`
-`assert::is_not_null` | `T != nullptr`
-`assert::fail` | N/A
+`assert::eq` | UASSERT_EQ | `T == T`
+`assert::neq` | UASSERT_NEQ | `T != T`
+`assert::is_true` | UASSERT_TRUE | `if (T)`
+`assert::is_false` | UASSERT_FALSE | `if (!T)`
+`assert::is_null` | UASSERT_NULL | `T == nullptr`
+`assert::is_not_null` | UASSERT_NOT_NULL | `T != nullptr`
+`assert::fail` | UASSERT_FAIL | N/A
+`assert::expr` | UASSERT | `if (expr)`
  
 If you are wishing to use `assert::eq` or `assert:neq`, you must currently provide the following operator to emit a friendly
 assert message.
@@ -56,7 +59,6 @@ assert message.
 		// eg: os << static_cast<std::underlying_type<MyType>::type>(v);
 		return os;
 	}
-
 
 ## Executing Tests ##
 
@@ -142,7 +144,10 @@ See [stb's FAQ](https://github.com/nothings/stb) for a great set of reasons. µT
 
 *What parts of C++11 does µTest use?*
 
-`std::chrono`, `std::memory`, `std::functional`.
+The following STL headers are used:
+    `chrono`, `exception`, `functional`, `memory`, `sstream`, `string`, `vector`
+
+In addition to this, the code uses C++ features such as `auto` and `enum class`.
 
 *What's the future for µTest?*
 
