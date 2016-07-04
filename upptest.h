@@ -306,12 +306,15 @@ namespace utest
 	public:
 		typedef std::vector<const info*> container_type;
 
+		virtual ~registry();
+
 		static registry& get();
 		void add(const info* test)
 		{
 			_tests.push_back(test);
 		}
 		container_type& tests() { return _tests; }
+
 	protected:
 		registry();		
 	private:
@@ -411,6 +414,10 @@ namespace utest
 			_instance = std::make_unique<detail::_concrete_registry>();
 		}
 		return *_instance;
+	}
+
+	registry::~registry()
+	{		
 	}
 
 	registry::registry()
