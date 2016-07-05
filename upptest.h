@@ -335,6 +335,7 @@ namespace utest
 	class runner
 	{
 	public:
+		typedef const info* const info_type;
 
 		static status run(const info* const ti, result& out_res)
 		{
@@ -347,7 +348,7 @@ namespace utest
 		static status run(iterator_type itr_begin, iterator_type itr_end,
 			const execution_observer& observer)
 		{
-			return run(itr_begin, itr_end, [](auto) { return true; }, observer);
+			return run(itr_begin, itr_end, [](info_type) { return true; }, observer);
 		}
 
 		template<typename iterator_type, class binary_predicate, class execution_observer>
@@ -388,7 +389,7 @@ namespace utest
 		template<class execution_observer>
 		static status run_registered(const execution_observer& observer)
 		{
-			return run(registry::get().tests(), [](auto) { return true; }, observer);
+			return run(registry::get().tests(), [](info_type) { return true; }, observer);
 		}
 
 		template<class binary_predicate, class execution_observer>
