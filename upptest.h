@@ -185,8 +185,8 @@ namespace utest
 	class basic_assert
 	{
 	public:
-		template<typename T>
-		static void eq(const T& expected, const T& actual, const char* file_name = "", const int line_num = 0)
+		template<typename T1, typename T2>
+		static void eq(const T1& expected, const T2& actual, const char* file_name = "", const int line_num = 0)
 		{
 			if (expected == actual)
 			{
@@ -197,8 +197,8 @@ namespace utest
 			fail(err.str(), file_name, line_num);
 		}
 
-		template<typename T>
-		static void neq(const T& expected, const T& actual, const char* file_name = "", const int line_num = 0)
+		template<typename T1, typename T2>
+		static void neq(const T1& expected, const T2& actual, const char* file_name = "", const int line_num = 0)
 		{
 			if (expected != actual)
 			{
