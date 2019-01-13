@@ -40,7 +40,7 @@ In order to provide information about the file and line the assertion failed, se
 The basic assert actions are are:
 
 function | macro | required operator on type T
---- | --- 
+--- | --- | ---
 `assert::eq` | UASSERT_EQ | `T == T`
 `assert::neq` | UASSERT_NEQ | `T != T`
 `assert::is_true` | UASSERT_TRUE | `if (T)`
