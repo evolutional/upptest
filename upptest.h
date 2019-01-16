@@ -401,8 +401,6 @@ namespace utest
 
 #ifdef UTEST_CPP_IMPLEMENTATION
 
-	std::unique_ptr<registry> registry::_instance;
-
 	namespace detail
 	{
 		class _concrete_registry : public registry {};
@@ -410,11 +408,12 @@ namespace utest
 
 	registry& registry::get()
 	{
-		if(!_instance)
+		static std::unique_ptr<registry> instance;
+		if (!instance)
 		{
-			_instance = std::make_unique<detail::_concrete_registry>();
+			instance = std::make_unique<detail::_concrete_registry>();
 		}
-		return *_instance;
+		return *instance;
 	}
 
 	registry::~registry()
@@ -427,6 +426,4 @@ namespace utest
 	}
 
 #endif	// UTEST_CPP_IMPLEMENTATION
-
 }
-
